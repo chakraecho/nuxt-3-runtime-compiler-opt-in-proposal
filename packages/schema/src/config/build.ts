@@ -638,5 +638,12 @@ export default {
      * @version 2
      */
     followSymlinks: false
-  }
+  },
+
+  
+  /**
+   * enable runtime compiler on build
+   * @version 3
+   */
+   runtimeCompiler: false
 }
