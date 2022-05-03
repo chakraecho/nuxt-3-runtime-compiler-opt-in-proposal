@@ -76,7 +76,7 @@ export async function initNitro (nuxt: Nuxt) {
       '@vue/compiler-core': (nuxt.options.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-core' : 'unenv/runtime/mock/proxy',
       '@vue/compiler-dom': (nuxt.options.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-dom' : 'unenv/runtime/mock/proxy',
       '@vue/compiler-ssr': (nuxt.options.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-ssr' : 'unenv/runtime/mock/proxy',
-      '@vue/devtools-api': (nuxt.options.runtimeCompiler && !nuxt.options.dev) ? '@vue/devtools-api' : 'unenv/runtime/mock/proxy',
+      '@vue/devtools-api': 'unenv/runtime/mock/proxy',
 
       // Renderer
       '#vue-renderer': resolve(distDir, 'core/runtime/nitro/vue3'),
@@ -140,7 +140,6 @@ export async function initNitro (nuxt: Nuxt) {
             './node_modules/@vue/compiler-core',
             './node_modules/@vue/compiler-dom',
             './node_modules/@vue/compiler-ssr',
-            './node_modules/@vue/devtools-api',
             './node_modules/vue/server-renderer'
           ],
           esmExternals: id => !id.startsWith('unenv/'),
