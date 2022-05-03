@@ -142,7 +142,9 @@ export async function initNitro (nuxt: Nuxt) {
             './node_modules/@vue/compiler-ssr',
             './node_modules/@vue/devtools-api',
             './node_modules/vue/server-renderer'
-          ]
+          ],
+          esmExternals: id => !id.startsWith('unenv/'),
+          requireReturnsDefault: 'auto'
         }))
       }
     })
