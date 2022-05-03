@@ -36,6 +36,7 @@
     "@nuxt/ui-templates": "^0.1.0",
     "@nuxt/vite-builder": "^3.0.0-rc.2",
     "@rollup/plugin-commonjs": "^22.0.0",
+    "@vue/compiler-dom": "^3.2.33",
     "@vue/reactivity": "^3.2.33",
     "@vue/shared": "^3.2.33",
     "@vueuse/head": "^0.7.6",
