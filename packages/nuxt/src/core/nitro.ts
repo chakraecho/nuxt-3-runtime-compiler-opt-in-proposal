@@ -7,7 +7,6 @@ import { resolvePath } from '@nuxt/kit'
 import defu from 'defu'
 import fsExtra from 'fs-extra'
 import { toEventHandler, dynamicEventHandler } from 'h3'
-import commonjs from '@rollup/plugin-commonjs'
 import { distDir } from '../dirs'
 import { ImportProtectionPlugin } from './plugins/import-protection'
 
@@ -92,6 +91,16 @@ export async function initNitro (nuxt: Nuxt) {
     },
     rollupConfig: {
       plugins: []
+    },
+    commonJS: {
+      dynamicRequireTargets: (nuxt.options.runtimeCompiler && !nuxt.options.dev)
+        ? [
+            './node_modules/@vue/compiler-core',
+            './node_modules/@vue/compiler-dom',
+            './node_modules/@vue/compiler-ssr',
+            './node_modules/vue/server-renderer'
+          ]
+        : []
     }
   })
 
@@ -128,26 +137,6 @@ export async function initNitro (nuxt: Nuxt) {
     nuxt.hook('vite:extendConfig', (config, { isClient }) => {
       if (isClient) {
         config.resolve.alias.vue = 'vue/dist/vue.esm-bundler'
-      }
-    })
-
-    nitro.hooks.hook('rollup:before', (nitro) => {
-      // get the index of @rollup/plugin-commonjs set by nitro
-      const indexOfCommonJsPlugin = nitro.options.rollupConfig.plugins.findIndex((plugin) => {
-        return typeof plugin !== 'boolean' && plugin.name === 'commonjs'
-      })
-      if (indexOfCommonJsPlugin >= 0) {
-        // replace the @rollup/plugin-commonjs set by nitro
-        nitro.options.rollupConfig.plugins.splice(indexOfCommonJsPlugin, 1, commonjs({
-          dynamicRequireTargets: [
-            './node_modules/@vue/compiler-core',
-            './node_modules/@vue/compiler-dom',
-            './node_modules/@vue/compiler-ssr',
-            './node_modules/vue/server-renderer'
-          ],
-          esmExternals: id => !id.startsWith('unenv/'),
-          requireReturnsDefault: 'auto'
-        }))
       }
     })
   }
