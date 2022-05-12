@@ -72,9 +72,9 @@ export async function initNitro (nuxt: Nuxt) {
       // Vue 3 mocks
       'estree-walker': 'unenv/runtime/mock/proxy',
       '@babel/parser': 'unenv/runtime/mock/proxy',
-      '@vue/compiler-core': (nuxt.options.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-core' : 'unenv/runtime/mock/proxy',
-      '@vue/compiler-dom': (nuxt.options.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-dom' : 'unenv/runtime/mock/proxy',
-      '@vue/compiler-ssr': (nuxt.options.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-ssr' : 'unenv/runtime/mock/proxy',
+      '@vue/compiler-core': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-core' : 'unenv/runtime/mock/proxy',
+      '@vue/compiler-dom': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-dom' : 'unenv/runtime/mock/proxy',
+      '@vue/compiler-ssr': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-ssr' : 'unenv/runtime/mock/proxy',
       '@vue/devtools-api': 'unenv/runtime/mock/proxy',
 
       // Renderer
@@ -93,7 +93,7 @@ export async function initNitro (nuxt: Nuxt) {
       plugins: []
     },
     commonJS: {
-      dynamicRequireTargets: (nuxt.options.runtimeCompiler && !nuxt.options.dev)
+      dynamicRequireTargets: (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev)
         ? [
             './node_modules/@vue/compiler-core',
             './node_modules/@vue/compiler-dom',
@@ -132,7 +132,7 @@ export async function initNitro (nuxt: Nuxt) {
   })
 
   // Enable runtime compiler client side
-  if (nuxt.options.runtimeCompiler) {
+  if (nuxt.options.vue.runtimeCompiler) {
     // set vue esm on client
     nuxt.hook('vite:extendConfig', (config, { isClient }) => {
       if (isClient) {
