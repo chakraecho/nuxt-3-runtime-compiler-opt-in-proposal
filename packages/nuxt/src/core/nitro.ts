@@ -131,12 +131,24 @@ export async function initNitro (nuxt: Nuxt) {
     nitro.options.rollupConfig.plugins.push(plugin)
   })
 
-  // Enable runtime compiler on build
+  // Enable runtime compiler client side
   if (nuxt.options.runtimeCompiler) {
     // set vue esm on client
     nuxt.hook('vite:extendConfig', (config, { isClient }) => {
       if (isClient) {
         config.resolve.alias.vue = 'vue/dist/vue.esm-bundler'
+      }
+    })
+    nuxt.hook('webpack:config', (configuration) => {
+      const clientConfig = configuration.find(config => config.name === 'client')
+      if (!clientConfig.resolve) { clientConfig.resolve.alias = {} }
+      if (Array.isArray(clientConfig.resolve.alias)) {
+        clientConfig.resolve.alias.push({
+          name: 'vue',
+          alias: 'vue/dist/vue.esm-bundler'
+        })
+      } else {
+        clientConfig.resolve.alias.vue = 'vue/dist/vue.esm-bundler'
       }
     })
   }
