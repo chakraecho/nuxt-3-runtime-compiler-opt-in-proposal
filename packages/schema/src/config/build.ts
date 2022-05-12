@@ -266,7 +266,7 @@ export default {
           object: 'src',
           embed: 'src'
         },
-        compilerOptions: { $resolve: (val, get) => val ?? get('vue.compilerOptions') },
+        compilerOptions: { $resolve: (val, get) => val ?? get('vue.compilerOptions') }
       },
       css: {
         importLoaders: 0,
@@ -639,11 +639,4 @@ export default {
      */
     followSymlinks: false
   },
-
-  
-  /**
-   * enable runtime compiler on build
-   * @version 3
-   */
-   runtimeCompiler: false
 }
