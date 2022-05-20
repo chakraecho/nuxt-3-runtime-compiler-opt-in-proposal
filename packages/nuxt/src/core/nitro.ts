@@ -98,7 +98,8 @@ export async function initNitro (nuxt: Nuxt) {
             './node_modules/@vue/compiler-core',
             './node_modules/@vue/compiler-dom',
             './node_modules/@vue/compiler-ssr',
-            './node_modules/vue/server-renderer'
+            './node_modules/vue/server-renderer',
+            './node_modules/vue'
           ]
         : []
     }
