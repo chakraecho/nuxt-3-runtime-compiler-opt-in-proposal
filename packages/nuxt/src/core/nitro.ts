@@ -58,17 +58,26 @@ export async function initNitro (nuxt: Nuxt) {
     sourcemap: nuxt.options.sourcemap,
     externals: {
       inline: [
-        ...(nuxt.options.dev ? [] : ['vue', '@vue/', '@nuxt/', nuxt.options.buildDir]),
+        ...(nuxt.options.dev
+          ? []
+          : [
+              ...nuxt.options.experimental.externalVue ? [] : ['vue', '@vue/'],
+              '@nuxt/',
+              nuxt.options.buildDir
+            ]),
         'nuxt/dist',
         'nuxt3/dist'
       ]
     },
     alias: {
-      // TODO: #590
-      'vue/server-renderer': 'vue/server-renderer',
-      'vue/compiler-sfc': 'vue/compiler-sfc',
-      vue: await resolvePath(`vue/dist/vue.cjs${nuxt.options.dev ? '' : '.prod'}.js`),
+      ...nuxt.options.experimental.externalVue
+        ? {}
+        : {
 
+            'vue/compiler-sfc': 'vue/compiler-sfc',
+            'vue/server-renderer': 'vue/server-renderer',
+            vue: await resolvePath(`vue/dist/vue.cjs${nuxt.options.dev ? '' : '.prod'}.js`)
+          },
       // Vue 3 mocks
       'estree-walker': 'unenv/runtime/mock/proxy',
       '@babel/parser': 'unenv/runtime/mock/proxy',
@@ -77,9 +86,6 @@ export async function initNitro (nuxt: Nuxt) {
       '@vue/compiler-ssr': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-ssr' : 'unenv/runtime/mock/proxy',
       '@vue/devtools-api': 'unenv/runtime/mock/proxy',
 
-      // Renderer
-      '#vue-renderer': resolve(distDir, 'core/runtime/nitro/vue3'),
-
       // Paths
       '#paths': resolve(distDir, 'core/runtime/nitro/paths'),
 
@@ -87,7 +93,7 @@ export async function initNitro (nuxt: Nuxt) {
       ...nuxt.options.alias
     },
     replace: {
-      'process.env.NUXT_NO_SSR': nuxt.options.ssr === false ? true : undefined
+      'process.env.NUXT_NO_SSR': nuxt.options.ssr === false
     },
     rollupConfig: {
       plugins: []
