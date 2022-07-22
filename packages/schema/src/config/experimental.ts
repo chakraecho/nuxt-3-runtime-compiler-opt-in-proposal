@@ -23,6 +23,12 @@ export default {
      * Externalize `vue`, `@vue/*` and `vue-router` when build
      * @see https://github.com/nuxt/framework/issues/4084
      */
-    externalVue: false
+    externalVue: false,
+
+    /**
+     * Tree shakes contents of client-only components from server bundle
+     * @see https://github.com/nuxt/framework/pull/5750
+     */
+    treeshakeClientOnly: false,
   }
 }
