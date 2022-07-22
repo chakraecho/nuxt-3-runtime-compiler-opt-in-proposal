@@ -79,8 +79,8 @@ export async function initNitro (nuxt: Nuxt) {
             vue: await resolvePath(`vue/dist/vue.cjs${nuxt.options.dev ? '' : '.prod'}.js`)
           },
       // Vue 3 mocks
-      'estree-walker': 'unenv/runtime/mock/proxy',
-      '@babel/parser': 'unenv/runtime/mock/proxy',
+      'estree-walker': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? 'estree-walker' : 'unenv/runtime/mock/proxy',
+      '@babel/parser': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@babel/parser' : 'unenv/runtime/mock/proxy',
       '@vue/compiler-core': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-core' : 'unenv/runtime/mock/proxy',
       '@vue/compiler-dom': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-dom' : 'unenv/runtime/mock/proxy',
       '@vue/compiler-ssr': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-ssr' : 'unenv/runtime/mock/proxy',
@@ -100,13 +100,13 @@ export async function initNitro (nuxt: Nuxt) {
     },
     commonJS: {
       dynamicRequireTargets: (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev)
-          // TODO prefer using absolute path
+      // TODO prefer using absolute path
         ? [
+            './node_modules/vue',
             './node_modules/@vue/compiler-core',
             './node_modules/@vue/compiler-dom',
             './node_modules/@vue/compiler-ssr',
-            './node_modules/vue/server-renderer',
-            './node_modules/vue'
+            './node_modules/vue/server-renderer'
           ]
         : []
     }
