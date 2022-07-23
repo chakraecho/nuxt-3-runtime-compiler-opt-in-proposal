@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const ready = useState('ready', () => false)
 /**
  * most of the time, vue compiler need at least a VNode, use h() from vue to define and render the component
  */
@@ -9,16 +10,19 @@ const ComponentDefinedInSetup = h({
 /**
  * block the navigation until api calls finishes
  */
-const { data } = await useAsyncData(async () => {
+const { data } = await useAsyncData('templates', async () => {
   const [interactiveComponent, templateString] = await Promise.all([
     $fetch('/api/full-component'),
     $fetch('/api/template')
   ])
 
+  ready.value = true
+
   return {
-    interactiveComponent, templateString
+    interactiveComponent,
+    templateString
   }
-})
+}, {})
 
 /**
  * you can even auto generate a list of component in a composable
@@ -28,13 +32,17 @@ const { data } = await useAsyncData(async () => {
 const Interactive = h({
   template: data.value.interactiveComponent.template,
   setup (props) {
-    console.log(props)
     /**
      * use new Function for closure
      * add needed params, it can be anything
      */
     // eslint-disable-next-line no-new-func
-    return new Function('ref', 'computed', 'props', data.value.interactiveComponent.setup)(ref, computed, props)
+    return new Function(
+      'ref',
+      'computed',
+      'props',
+      data.value.interactiveComponent.setup
+    )(ref, computed, props)
   },
   props: data.value.interactiveComponent.props
 })
@@ -43,15 +51,17 @@ const Interactive = h({
 <template>
   <!-- Edit this file to play around with Nuxt but never commit changes! -->
   <div>
-    <ComponentDefinedInSetup />
-    <Name template="<div>I'm the Name.ts component</div>" />
-    <show-template :template="data.templateString" name="Julien" />
-    <Interactive lastname="Huang" firstname="Julien" />
+    <template v-if="ready">
+      <ComponentDefinedInSetup />
+      <Name template="<div>I'm the Name.ts component</div>" />
+      <show-template :template="data.templateString" name="Julien" />
+      <Interactive lastname="Huang" firstname="Julien" />
+    </template>
   </div>
 </template>
 
 <style>
-.border{
+.border {
   border: 1px solid burlywood;
 }
 </style>
