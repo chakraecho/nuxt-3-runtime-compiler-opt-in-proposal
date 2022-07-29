@@ -24,7 +24,7 @@ export function createClientOnly (component) {
     // override the component render (non <script setup> component)
     component.render = (ctx, cache, props, state, data, options) => {
       return state.mounted$
-        ? h(Fragment, [_render(ctx, cache, props, state, data, options)])
+        ? _render(ctx, cache, props, state, data, options)
         : h('div', ctx.$attrs ?? ctx._.attrs)
     }
   } else if (_template) {
@@ -47,8 +47,8 @@ export function createClientOnly (component) {
             ? { ...setupState, mounted$ }
             : () => {
                 return mounted$.value
-                // use Fragment to avoid oldChildren is null issue
-                  ? h(Fragment, [setupState(props, ctx)])
+                  // use Fragment to avoid oldChildren is null isue
+                  ? setupState(props, ctx)
                   : h('div', ctx.attrs)
               }
         })
