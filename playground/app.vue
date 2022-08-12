@@ -1,12 +1,16 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <!-- Edit this file to play around with Nuxt but never commit changes! -->
   <div>
-    Nuxt 3 Playground
+    <client-only>
+      <Boom>
+        <template #test>
+        <div>         
+          This is from app.vue
+        </div>
+        </template>
+      </Boom>
+    </client-only>
+    <Test />
+    <Hello />
+    <Expose />
   </div>
 </template>
-
-<style scoped>
-</style>
