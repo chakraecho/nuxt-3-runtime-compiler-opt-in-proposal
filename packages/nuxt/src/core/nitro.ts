@@ -143,18 +143,6 @@ export async function initNitro (nuxt: Nuxt) {
   // Connect hooks
   nuxt.hook('close', () => nitro.hooks.callHook('close'))
 
-  // Register nuxt protection patterns
-  nitro.hooks.hook('rollup:before', (nitro) => {
-    const plugin = ImportProtectionPlugin.rollup({
-      rootDir: nuxt.options.rootDir,
-      patterns: [
-        ...['#app', /^#build(\/|$)/]
-          .map(p => [p, 'Vue app aliases are not allowed in server routes.']) as [RegExp | string, string][]
-      ]
-    })
-    nitro.options.rollupConfig.plugins.push(plugin)
-  })
-
   // Enable runtime compiler client side
   if (nuxt.options.vue.runtimeCompiler) {
     nuxt.options.experimental.externalVue = true
