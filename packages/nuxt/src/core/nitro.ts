@@ -149,14 +149,14 @@ export async function initNitro (nuxt: Nuxt) {
     // set vue esm on client
     nuxt.hook('vite:extendConfig', (config, { isClient }) => {
       if (isClient) {
-        if (Array.isArray(config.resolve.alias)) {
-          config.resolve.alias.push({
+        if (Array.isArray(config.resolve!.alias)) {
+          config.resolve!.alias.push({
             find: 'vue',
             replacement: 'vue/dist/vue.esm-bundler'
           })
         } else {
-          config.resolve.alias = {
-            ...config.resolve.alias,
+          config.resolve!.alias = {
+            ...config.resolve!.alias,
             vue: 'vue/dist/vue.esm-bundler'
           }
         }
@@ -164,14 +164,14 @@ export async function initNitro (nuxt: Nuxt) {
     })
     nuxt.hook('webpack:config', (configuration) => {
       const clientConfig = configuration.find(config => config.name === 'client')
-      if (!clientConfig.resolve) { clientConfig.resolve.alias = {} }
-      if (Array.isArray(clientConfig.resolve.alias)) {
-        clientConfig.resolve.alias.push({
+      if (!clientConfig!.resolve) { clientConfig!.resolve!.alias = {} }
+      if (Array.isArray(clientConfig!.resolve!.alias)) {
+        clientConfig!.resolve!.alias.push({
           name: 'vue',
           alias: 'vue/dist/vue.esm-bundler'
         })
       } else {
-        clientConfig.resolve.alias.vue = 'vue/dist/vue.esm-bundler'
+        clientConfig!.resolve!.alias!.vue = 'vue/dist/vue.esm-bundler'
       }
     })
   }
