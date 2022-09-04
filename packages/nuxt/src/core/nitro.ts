@@ -87,7 +87,7 @@ export async function initNitro (nuxt: Nuxt) {
       '@vue/compiler-core': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-core' : 'unenv/runtime/mock/proxy',
       '@vue/compiler-dom': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-dom' : 'unenv/runtime/mock/proxy',
       '@vue/compiler-ssr': (nuxt.options.vue.runtimeCompiler && !nuxt.options.dev) ? '@vue/compiler-ssr' : 'unenv/runtime/mock/proxy',
-      '@vue/devtools-api': 'unenv/runtime/mock/proxy-cjs',
+      '@vue/devtools-api': 'vue-devtools-stub',
 
       // Paths
       '#paths': resolve(distDir, 'core/runtime/nitro/paths'),
