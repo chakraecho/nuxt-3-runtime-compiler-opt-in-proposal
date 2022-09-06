@@ -64,7 +64,7 @@ export async function initNitro (nuxt: Nuxt) {
         ...(nuxt.options.dev
           ? []
           : [
-              ...(nuxt.options.experimental.externalVue || nuxt.options.vue.runtimeCompiler) ? [] : ['vue', '@vue/'],
+              ...nuxt.options.experimental.externalVue ? [] : ['vue', '@vue/'],
               '@nuxt/',
               nuxt.options.buildDir
             ]),
@@ -73,7 +73,7 @@ export async function initNitro (nuxt: Nuxt) {
       ]
     },
     alias: {
-      ...(nuxt.options.experimental.externalVue || nuxt.options.vue.runtimeCompiler)
+      ...nuxt.options.experimental.externalVue
         ? {}
         : {
 
@@ -105,7 +105,15 @@ export async function initNitro (nuxt: Nuxt) {
       plugins: []
     },
     commonJS: {
-      dynamicRequireTargets: []
+      dynamicRequireTargets: (!nuxt.options.experimental.externalVue && nuxt.options.vue.runtimeCompiler && !nuxt.options.dev)
+        ? [
+            './node_modules/vue',
+            './node_modules/@vue/compiler-core',
+            './node_modules/@vue/compiler-dom',
+            './node_modules/@vue/compiler-ssr',
+            './node_modules/vue/server-renderer'
+          ]
+        : []
     }
   })
 
@@ -145,7 +153,6 @@ export async function initNitro (nuxt: Nuxt) {
 
   // Enable runtime compiler client side
   if (nuxt.options.vue.runtimeCompiler) {
-    nuxt.options.experimental.externalVue = true
     // set vue esm on client
     nuxt.hook('vite:extendConfig', (config, { isClient }) => {
       if (isClient) {
