@@ -74,6 +74,11 @@ export const navigateTo = (to: RouteLocationRaw | undefined | null, options?: Na
   }
   if (isExternal && parseURL(toPath).protocol === 'script:') {
     throw new Error('Cannot navigate to an URL with script protocol.')
+  } 
+
+  // Early redirect on client-side
+  if (process.client && !isExternal && isProcessingMiddleware()) {
+    return to
   }
 
   const router = useRouter()
@@ -86,11 +91,6 @@ export const navigateTo = (to: RouteLocationRaw | undefined | null, options?: Na
     }
   }
 
-  // Early redirect on client-side
-  if (!isExternal && isProcessingMiddleware()) {
-    return to
-  }
-
   // Client-side redirection using vue-router
   if (isExternal) {
     if (options?.replace) {
@@ -99,7 +99,7 @@ export const navigateTo = (to: RouteLocationRaw | undefined | null, options?: Na
       location.href = toPath
     }
     return Promise.resolve()
-  }
+  } 
 
   return options?.replace ? router.replace(to) : router.push(to)
 }
