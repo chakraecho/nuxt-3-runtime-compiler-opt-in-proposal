@@ -2,9 +2,7 @@ import { getCurrentInstance, inject } from 'vue'
 import type { Router, RouteLocationNormalizedLoaded, NavigationGuard, RouteLocationNormalized, RouteLocationRaw, NavigationFailure, RouteLocationPathRaw } from 'vue-router'
 import { sendRedirect } from 'h3'
 import { hasProtocol, joinURL, parseURL } from 'ufo'
-import { useNuxtApp, useRuntimeConfig } from '../nuxt'
-import { createError, NuxtError } from './error'
-import { useState } from './state'
+import { useNuxtApp, useRuntimeConfig, useState, createError, NuxtError } from '#app'
 
 export const useRouter = () => {
   return useNuxtApp()?.$router as Router
@@ -78,11 +76,6 @@ export const navigateTo = (to: RouteLocationRaw | undefined | null, options?: Na
     throw new Error('Cannot navigate to an URL with script protocol.')
   }
 
-  // Early redirect on client-side
-  if (!isExternal && isProcessingMiddleware()) {
-    return to
-  }
-
   const router = useRouter()
 
   if (process.server) {
@@ -91,6 +84,11 @@ export const navigateTo = (to: RouteLocationRaw | undefined | null, options?: Na
       const redirectLocation = isExternal ? toPath : joinURL(useRuntimeConfig().app.baseURL, router.resolve(to).fullPath || '/')
       return nuxtApp.callHook('app:redirected').then(() => sendRedirect(nuxtApp.ssrContext!.event, redirectLocation, options?.redirectCode || 302))
     }
+  }
+
+  // Early redirect on client-side
+  if (!isExternal && isProcessingMiddleware()) {
+    return to
   }
 
   // Client-side redirection using vue-router
