@@ -37,6 +37,11 @@
       class="string-stateful-script-should-be-hidden"
     />
     <ClientNoState v-show="show" class="no-state-hidden" />
+    <ClientNoState>
+      <template #fallback>
+        <div>this is rendered using a fallback slot</div>
+      </template>
+    </ClientNoState>
 
     <button class="test-ref-1" @click="stringStatefulComp.add">
       increment count

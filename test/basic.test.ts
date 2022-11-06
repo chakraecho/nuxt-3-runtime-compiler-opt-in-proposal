@@ -162,6 +162,8 @@ describe('pages', () => {
     expect(html).toContain('<div>Fallback</div>')
     // ensure components are not rendered server-side
     expect(html).not.toContain('Should not be server rendered')
+    // ensure component render a fallback slot
+    expect(html).toContain('<div>this is rendered using a fallback slot</div>')
 
     await expectNoClientErrors('/client-only-components')
 
@@ -219,6 +221,8 @@ describe('pages', () => {
     expect(await page.locator('.client-only-script button').innerHTML()).toContain('2')
     expect(await page.locator('.string-stateful-script').innerHTML()).toContain('1')
     expect(await page.locator('.string-stateful').innerHTML()).toContain('1')
+
+    expect(await page.content()).not.toContain('<div>this is rendered using a fallback slot</div>')
 
     // ensure directives are reactive
     await page.locator('button#show-all').click()
