@@ -23,6 +23,7 @@ type UseFetchOptions = {
   server?: boolean
   lazy?: boolean
   immediate?: boolean
+  shallowRef?: boolean
   default?: () => DataT
   transform?: (input: DataT) => DataT
   pick?: string[]
@@ -61,6 +62,7 @@ All fetch options can be given a `computed` or `ref` value. These will be watche
   * `watch`: watch reactive sources to auto-refresh.
   * `transform`: A function that can be used to alter `handler` function result after resolving.
   * `immediate`: When set to `false`, will prevent the request from firing immediately. (defaults to `true`)
+  * `shallowRef`: When set to `true`, will return a `shallowRef` instead of a `ref`. (defaults to `false`)
 
 ::alert{type=warning}
 If you provide a function or ref as the `url` parameter, or if you provide functions as arguments to the `options` parameter, then the `useFetch` call will not match other `useFetch` calls elsewhere in your codebase, even if the options seem to be identical. If you wish to force a match, you may provide your own key in `options`.
